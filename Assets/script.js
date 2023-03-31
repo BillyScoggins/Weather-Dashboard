@@ -1,51 +1,20 @@
 
-let searchHistory = []
-let lastCitySearched = ""
+var apiKey = "6bc02efad81fd6e69c73b3f035eba587"
 
-let getCityWeather = function(city) {
-    
-    let apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=ce39e7239416ad754359ca762d28521a&units=imperial";
+var city = "dallas,tx"
 
-    fetch(apiUrl)
+var country = "us"
 
-    .then(function(response) {
-        
-            if (response.ok) {
-                response.json().then(function(data) {
-                    displayWeather(data);
-                });
-            
-            } else {
-                alert("Error: " + response.statusText);
-            }
-        })  
+var coordinatesURL = "http://api.openweathermap.org/geo/1.0/direct?q="+city+country+"&appid="+apiKey;
 
-        .catch(function(error) {
-            alert("Unable to connect to OpenWeather");
-        })
-};
+fetch(coordinatesURL)
 
-let searchSubmitHandler = function(event) {
-    
-    event.preventDefault();
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data) {
+    console.log(data);
+  });
 
-    
-    let cityName = $("#cityname").val().trim();
-
-    
-    if(cityName) {
-        
-        getCityWeather(cityName);
-
-    
-        $("#cityname").val("");
-    } else {
-        
-        alert("Please enter a city name");
-    }
-};
-
-
-let displayWeather = function(weatherData) {
-
+  
 
