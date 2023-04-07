@@ -1,49 +1,64 @@
 var cityform = document.getElementById("citySelector");
+var btn = document.getElementById("btn");
+var temp = document.getElementById("temp");
+var humidity = document.getElementById("humidity");
+var windSpeed = document.getElementById("wind-speed");
 var apiKey = "6bc02efad81fd6e69c73b3f035eba587"
 
-var city = "dallas,tx"
+var city = document.getElementById("location");
+console.log("CITY: ", city)
 
 var country = "us"
 
-var coordinatesURL = "http://api.openweathermap.org/geo/1.0/direct?q="+city+country+"&appid="+apiKey;
+function getCurrWeather (city) {
 
-fetch(coordinatesURL)
-
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    console.log(data);
-  });
+  var coordinatesURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey;
   
-cityform.addEventListener("submit", function(event){
-  event.preventDefault();
-  console.log(event);
-})   
-fetch('https://api.openweathermap.org/data/2.5/weather?q=Dallas&appid=6bc02efad81fd6e69c73b3f035eba587&units=metric')
-  .then(response => response.json())
-  .then(data => console.log(data));
+  fetch(coordinatesURL)
+  
+  .then(function (response) {
+      console.log("RESPONSE: ", response);
+      return response.json();
+    })
+    .then(function (data) {
+      console.log("RESULT: ", data);
+      temp.textContent = data.main.temp;
+      humidity.textContent = data.main.humidity;
+      conditions.textContent = data.weather[0].description;
+      windSpeed.textContent = data.wind.speed;
+      var lat = data.coord.lat;
+      var lon = data.coord.lon;
+      var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid="+apiKey;
 
-  fetch('https://api.openweathermap.org/data/2.5/weather?q=Dallas&appid=6bc02efad81fd6e69c73b3f035eba587&units=metric')
-  .then(response => response.json())
-  .then(data => {
-    const weatherData = {
-      temperature: data.main.temp,
-      description: data.weather[0].description,
-      icon: data.weather[0].icon
-    };
-    console.log(weatherData);
-  });
+      fetch(forecastUrl)
+      .then (function(forecastResponse){
+        console.log(forecastResponse);
+        return forecastResponse.json();
 
-  fetch('https://api.openweathermap.org/data/2.5/weather?q=Dallas&appid=6bc02efad81fd6e69c73b3f035eba587&units=metric')
-  .then(response => response.json())
-  .then(data => {
-    const weatherData = {
-      temperature: data.main.temp,
-      description: data.weather[0].description,
-      icon: data.weather[0].icon
-    };
-    document.getElementById('temperature').textContent = weatherData.temperature;
-    document.getElementById('description').textContent = weatherData.description;
-    document.getElementById('icon').setAttribute('src', `https://openweathermap.org/img/w/${weatherData.icon}.png`);
-  });
+      }) 
+      .then(function(forecastData){
+        console.log(forecastData);
+      })
+
+
+    });
+}
+
+  
+   
+
+btn.addEventListener("click", function (e) {
+  e.preventDefault();
+  var data = city.value;
+  getCurrWeather(data)
+  console.log("DATA: ", city.value)
+})
+
+
+
+
+
+
+
+
+
