@@ -14,8 +14,8 @@ var country = "us"
 
 var temperature = document.getElementById("temperature");
 var humid = document.getElementById("humid");
-var windspeed = document.getElementById("windSpeed");
-var weatherConditions = document.getElementById("weatherConditions");
+var windspeed = document.getElementById("windspeed");
+var weatherConditions = document.getElementById("Weatherconditions");
 
 function getCurrWeather(city) {
 
@@ -46,14 +46,15 @@ function getCurrWeather(city) {
 
         })
         .then(function (forecastData) {
+          console.log(forecastData)
           
           for (let i = 0; i < forecastData.list.length; i++) {
             
           
-            temperature.textContent = forecastData.main.temp;
-            humid.textContent = forecastData.main.humidity;
-            weatherConditions.textContent = forecastData.weather[0].description;
-            windspeed.textContent = forecastData.wind.speed;
+            temperature.textContent = forecastData.list[i].main.temp;
+            humid.textContent = forecastData.list[i].main.humidity;
+            weatherConditions.textContent = forecastData.list[i].weather[0].description;
+            windspeed.textContent = forecastData.list[i].wind.speed;
         }})
 
 
